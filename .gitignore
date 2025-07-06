@@ -1,6 +1,6 @@
 .idea
 .venv
-.env
+backend/.env
 __pycache__
 *.pyc
 creds

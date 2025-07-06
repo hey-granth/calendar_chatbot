@@ -26,18 +26,20 @@ class GeminiLLM(LLM):
 
         generation_config = {}
         if stop:
-            generation_config["stop_sequences"] = [stop] if isinstance(stop, str) else stop
+            generation_config["stop_sequences"] = (
+                [stop] if isinstance(stop, str) else stop
+            )
         try:
             response = model.generate_content(
                 prompt,
-                generation_config=generation_config if generation_config else None
+                generation_config=generation_config if generation_config else None,
             )
         except google.api_core.exceptions.ResourceExhausted as e:
             print("Rate limited. Retrying in 10s...")
             time.sleep(10)
             response = model.generate_content(
                 prompt,
-                generation_config=generation_config if generation_config else None
+                generation_config=generation_config if generation_config else None,
             )
         return response.text.strip()
 
@@ -68,7 +70,10 @@ def book_event_tool(info: str) -> str:
     except Exception as e:
         return f"Error parsing input: {e}"
 
+
 tools = [check_availability_tool, book_event_tool]
 
 llm = GeminiLLM()
-agent = initialize_agent(tools, llm, agent="chat-zero-shot-react-description", verbose=True)
+agent = initialize_agent(
+    tools, llm, agent="chat-zero-shot-react-description", verbose=True
+)

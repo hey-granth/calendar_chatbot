@@ -8,6 +8,7 @@ app = FastAPI()
 class Message(BaseModel):
     message: str
 
+
 @app.post("/chat")
 def chat_with_agent(message: Message):
     response = agent.run(message.message)
